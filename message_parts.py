@@ -9,8 +9,9 @@ def compose_preview_parts(
     *,
     send_images: bool,
     image_position: str,
+    fields: list[str] | tuple[str, ...] | None = None,
 ) -> list[tuple[str, str]]:
-    text_part = ("text", format_preview_text(preview))
+    text_part = ("text", format_preview_text(preview, fields=fields))
     image_parts = [
         ("image", media.url)
         for media in preview.media

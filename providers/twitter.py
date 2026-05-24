@@ -45,6 +45,7 @@ def parse_vxtwitter_payload(url: str, payload: dict) -> Preview:
         platform="twitter",
         url=url,
         author=author,
+        author_url=f"https://x.com/{screen_name}" if screen_name else "",
         published_at=str(payload.get("date", "") or ""),
         description=str(payload.get("text", "") or ""),
         metrics=metrics,

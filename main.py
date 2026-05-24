@@ -24,7 +24,12 @@ class LinkPreviewPlugin(Star):
         self._last_preview_at: dict[str, float] = {}
 
     def _cfg(self, key: str, default: Any) -> Any:
-        return self.config.get(key, default)
+        if key in self.config:
+            return self.config.get(key, default)
+        for group in self.config.values():
+            if isinstance(group, dict) and key in group:
+                return group.get(key, default)
+        return default
 
     def _cooldown_key(self, event: AstrMessageEvent) -> str:
         message_obj = event.message_obj
@@ -83,6 +88,10 @@ class LinkPreviewPlugin(Star):
                     preview,
                     send_images=send_images,
                     image_position=str(self._cfg("image_position", "after_text")),
+                    fields=self._cfg(
+                        "youtube_fields" if link.platform == "youtube" else "twitter_fields",
+                        None,
+                    ),
                 ):
                     if kind == "image":
                         chain.append(Comp.Image.fromURL(value))

@@ -14,10 +14,22 @@ def test_format_youtube_preview_text():
         media=[],
     )
     text = format_preview_text(preview)
-    assert "YouTube 预览" in text
     assert "标题：A Video" in text
-    assert "频道：A Channel" in text
+    assert "上传频道：A Channel" in text
+    assert "播放量 1234 / 点赞量 55 / 上传日期 2026-05-24" in text
     assert "链接：https://youtu.be/abc" in text
+
+
+def test_format_youtube_preview_respects_fields():
+    preview = Preview(
+        platform="youtube",
+        url="https://youtu.be/abc",
+        title="A Video",
+        author="A Channel",
+        description="hello world",
+    )
+    text = format_preview_text(preview, fields=["title", "url"])
+    assert text == "标题：A Video\n链接：https://youtu.be/abc"
 
 
 def test_format_twitter_preview_with_images_and_body():
@@ -28,10 +40,24 @@ def test_format_twitter_preview_with_images_and_body():
         author="Name (@u)",
         published_at="2026-05-24",
         description="tweet body",
-        metrics={"喜欢": "9"},
+        metrics={"喜欢": "9", "转发": "2", "回复": "1"},
         media=[MediaItem(kind="image", url="https://pbs.twimg.com/a.jpg")],
+        author_url="https://x.com/u",
     )
     text = format_preview_text(preview)
-    assert "Twitter/X 预览" in text
-    assert "正文：tweet body" in text
-    assert "媒体：检测到 1 张图片" in text
+    assert "推文链接：https://x.com/u/status/1" in text
+    assert "发布时间：2026-05-24" in text
+    assert "喜欢 9 / 转发 2 / 回复 1" in text
+    assert "作者：Name (@u) https://x.com/u" in text
+    assert "tweet body" in text
+
+
+def test_format_twitter_preview_respects_fields():
+    preview = Preview(
+        platform="twitter",
+        url="https://x.com/u/status/1",
+        author="Name (@u)",
+        description="tweet body",
+    )
+    text = format_preview_text(preview, fields=["url", "author"])
+    assert text == "推文链接：https://x.com/u/status/1\n作者：Name (@u)"

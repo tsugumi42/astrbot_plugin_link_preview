@@ -1,68 +1,109 @@
 {
-  "enable_youtube": {
-    "description": "启用 YouTube 自动预览",
-    "type": "bool",
-    "default": true
+  "common": {
+    "description": "通用",
+    "type": "object",
+    "items": {
+      "max_links_per_message": {
+        "description": "单次链接数",
+        "type": "int",
+        "default": 1
+      },
+      "cooldown_seconds": {
+        "description": "冷却秒数",
+        "type": "int",
+        "default": 10
+      },
+      "request_timeout_seconds": {
+        "description": "请求超时",
+        "type": "int",
+        "default": 10
+      },
+      "send_processing_status": {
+        "description": "处理提示",
+        "type": "bool",
+        "hint": "收到链接后先回应。群聊优先表情，私聊用文字。",
+        "default": true
+      },
+      "image_position": {
+        "description": "图片位置",
+        "type": "string",
+        "options": ["before_text", "after_text"],
+        "hint": "before_text=先图后文，after_text=先文后图。",
+        "default": "before_text"
+      }
+    }
   },
-  "enable_twitter": {
-    "description": "启用 Twitter/X 自动预览",
-    "type": "bool",
-    "default": true
+  "youtube": {
+    "description": "YouTube",
+    "type": "object",
+    "items": {
+      "enable_youtube": {
+        "description": "启用预览",
+        "type": "bool",
+        "default": true
+      },
+      "send_thumbnail_image": {
+        "description": "发送缩略图",
+        "type": "bool",
+        "default": true
+      },
+      "youtube_fetch_page_details": {
+        "description": "补充数据",
+        "type": "bool",
+        "hint": "尝试读取播放量、点赞量、上传日期。失败时仍返回基础预览。",
+        "default": true
+      },
+      "youtube_detail_timeout_seconds": {
+        "description": "补充超时",
+        "type": "int",
+        "default": 4
+      },
+      "youtube_fields": {
+        "description": "显示内容",
+        "type": "list",
+        "options": ["title", "author", "metrics", "description", "url"],
+        "hint": "title=标题，author=频道，metrics=播放/点赞/日期，description=简介，url=链接。",
+        "default": ["title", "author", "metrics", "url"]
+      }
+    }
   },
-  "max_links_per_message": {
-    "description": "单条消息最多解析链接数",
-    "type": "int",
-    "default": 1
+  "twitter": {
+    "description": "Twitter/X",
+    "type": "object",
+    "items": {
+      "enable_twitter": {
+        "description": "启用预览",
+        "type": "bool",
+        "default": true
+      },
+      "send_twitter_images": {
+        "description": "发送图片",
+        "type": "bool",
+        "default": true
+      },
+      "twitter_fields": {
+        "description": "显示内容",
+        "type": "list",
+        "options": ["url", "published_at", "metrics", "author", "description"],
+        "hint": "url=链接，published_at=时间(+8)，metrics=互动数，author=作者，description=正文。",
+        "default": ["url", "published_at", "metrics", "author", "description"]
+      }
+    }
   },
-  "cooldown_seconds": {
-    "description": "同一会话预览冷却秒数",
-    "type": "int",
-    "default": 10
-  },
-  "request_timeout_seconds": {
-    "description": "网页请求超时秒数",
-    "type": "int",
-    "default": 10
-  },
-  "send_processing_status": {
-    "description": "收到链接后先发送处理状态。群聊优先表情回应，失败或私聊时发送文字。",
-    "type": "bool",
-    "default": true
-  },
-  "youtube_fetch_page_details": {
-    "description": "YouTube 预览在 oEmbed 之外，额外尝试读取页面中的观看数、上传时间和点赞数。",
-    "type": "bool",
-    "default": true
-  },
-  "youtube_detail_timeout_seconds": {
-    "description": "YouTube 详情页补充读取超时秒数。失败时仍返回基础预览。",
-    "type": "int",
-    "default": 4
-  },
-  "send_thumbnail_image": {
-    "description": "尝试发送 YouTube 缩略图",
-    "type": "bool",
-    "default": true
-  },
-  "send_twitter_images": {
-    "description": "尝试发送 Twitter/X 图片",
-    "type": "bool",
-    "default": true
-  },
-  "image_position": {
-    "description": "图片发送位置：after_text 表示文字后，before_text 表示文字前",
-    "type": "string",
-    "options": ["after_text", "before_text"],
-    "default": "after_text"
-  },
-  "youtube_api_key": {
-    "description": "预留 YouTube API Key，留空则不使用",
-    "type": "string",
-    "default": ""
-  },
-  "twitter_bearer_token": {
-    "description": "预留 Twitter/X Bearer Token，留空则不使用",
-    "type": "string",
-    "default": ""
+  "api": {
+    "description": "API预留",
+    "type": "object",
+    "items": {
+      "youtube_api_key": {
+        "description": "YouTube Key",
+        "type": "string",
+        "default": ""
+      },
+      "twitter_bearer_token": {
+        "description": "Twitter Token",
+        "type": "string",
+        "default": ""
+      }
+    }
   }
 }

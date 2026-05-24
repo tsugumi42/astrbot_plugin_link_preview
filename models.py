@@ -15,6 +15,7 @@ class Preview:
     url: str
     title: str = ""
     author: str = ""
+    author_url: str = ""
     published_at: str = ""
     description: str = ""
     metrics: dict[str, str] = field(default_factory=dict)
