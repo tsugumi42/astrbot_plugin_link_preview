@@ -9,7 +9,7 @@ from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, register
 
 from .extractors import SupportedLink, extract_supported_links
-from .formatters import format_preview_text
+from .message_parts import compose_preview_parts
 from .providers.base import PreviewFetchError
 from .providers.twitter import fetch_twitter_preview
 from .providers.youtube import fetch_youtube_preview
@@ -64,17 +64,22 @@ class LinkPreviewPlugin(Star):
                 else:
                     continue
 
-                chain = [Comp.Plain(format_preview_text(preview))]
                 send_images = (
                     link.platform == "youtube"
                     and bool(self._cfg("send_thumbnail_image", False))
                     or link.platform == "twitter"
                     and bool(self._cfg("send_twitter_images", True))
                 )
-                if send_images:
-                    for media in preview.media:
-                        if media.kind == "image":
-                            chain.append(Comp.Image.fromURL(media.url))
+                chain = []
+                for kind, value in compose_preview_parts(
+                    preview,
+                    send_images=send_images,
+                    image_position=str(self._cfg("image_position", "after_text")),
+                ):
+                    if kind == "image":
+                        chain.append(Comp.Image.fromURL(value))
+                    else:
+                        chain.append(Comp.Plain(value))
                 yield event.chain_result(chain)
             except PreviewFetchError as exc:
                 logger.warning("link preview failed: %s", exc)

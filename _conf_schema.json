@@ -34,6 +34,12 @@
     "type": "bool",
     "default": true
   },
+  "image_position": {
+    "description": "图片发送位置：after_text 表示文字后，before_text 表示文字前",
+    "type": "string",
+    "options": ["after_text", "before_text"],
+    "default": "after_text"
+  },
   "youtube_api_key": {
     "description": "预留 YouTube API Key，留空则不使用",
     "type": "string",
