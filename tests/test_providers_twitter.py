@@ -47,6 +47,25 @@ def test_parse_vxtwitter_payload_does_not_send_video_as_image():
     assert preview.media[0].kind == "video"
 
 
+def test_parse_vxtwitter_payload_sends_video_thumbnail_as_image():
+    payload = {
+        "user_name": "Name",
+        "user_screen_name": "name",
+        "text": "video tweet",
+        "media_extended": [
+            {
+                "type": "video",
+                "url": "https://video.twimg.com/ext_tw_video/a.mp4",
+                "thumbnail_url": "https://pbs.twimg.com/ext_tw_video_thumb/a.jpg",
+            }
+        ],
+    }
+    preview = parse_vxtwitter_payload("https://x.com/name/status/1", payload)
+    assert preview.media[0].kind == "image"
+    assert preview.media[0].url.endswith(".jpg")
+    assert preview.media[1].kind == "video"
+
+
 def test_parse_vxtwitter_payload_reads_extended_media_type():
     payload = {
         "user_name": "Name",
@@ -61,8 +80,10 @@ def test_parse_vxtwitter_payload_reads_extended_media_type():
         ],
     }
     preview = parse_vxtwitter_payload("https://x.com/name/status/1", payload)
-    assert preview.media[0].kind == "gif"
-    assert preview.media[0].url.endswith(".mp4")
+    assert preview.media[0].kind == "image"
+    assert preview.media[0].url.endswith(".jpg")
+    assert preview.media[1].kind == "gif"
+    assert preview.media[1].url.endswith(".mp4")
 
 
 def test_vxtwitter_api_url_for_x_status():

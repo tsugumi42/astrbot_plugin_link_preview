@@ -64,7 +64,11 @@ def parse_vxtwitter_payload(url: str, payload: dict) -> Preview:
             continue
         media_url = str(item.get("url") or item.get("thumbnail_url") or "")
         if media_url:
-            media.append(MediaItem(_media_kind_from_type(item.get("type"), media_url), media_url))
+            kind = _media_kind_from_type(item.get("type"), media_url)
+            thumbnail_url = str(item.get("thumbnail_url") or "")
+            if kind in {"video", "gif"} and thumbnail_url:
+                media.append(MediaItem("image", thumbnail_url))
+            media.append(MediaItem(kind, media_url))
     if not media:
         media = [
             MediaItem(_media_kind_from_url(item), item)

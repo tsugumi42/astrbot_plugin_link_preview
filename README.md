@@ -16,8 +16,9 @@ AstrBot 链接预览插件：自动解析 YouTube 和 Twitter/X 链接并生成�
 - YouTube 优先使用公开 oEmbed 信息，并可尽量补充播放量、上传日期和点赞量。
 - 可配置 YouTube/Twitter 各自显示哪些字段。
 - Twitter/X 状态链接优先使用 vxtwitter API，减少直接访问 x.com 导致的等待。
-- Twitter/X 图片会在配置开启时尽量随消息发送。
+- Twitter/X 图片会在配置开启时尽量随消息发送；视频/GIF 若有静态预览图，则只发送预览图。
 - 可配置图片在文字前或文字后发送。
+- 可配置群聊和私聊权限。
 - 官方 API 字段已预留，默认不使用。
 - 不生成图片卡片，保留可复制、可点击的文本链接。
 
@@ -45,6 +46,8 @@ QQ 小号 -> NapCat -> OneBot v11 反向 WebSocket -> AstrBot aiocqhttp 适配�
 - `send_thumbnail_image`: 是否尝试发送 YouTube 缩略图。
 - `send_twitter_images`: 是否尝试发送 Twitter/X 图片。
 - `image_position`: 图片位置，`after_text` 为文字后，`before_text` 为文字前。
+- `group_mode` / `group_ids`: 群聊权限和群号名单。
+- `private_mode` / `private_whitelist` / `private_blacklist`: 私聊权限和 QQ 号名单。
 - `youtube_api_key` / `twitter_bearer_token`: 预留字段，第一版为空即可。
 
 ## 已知限制

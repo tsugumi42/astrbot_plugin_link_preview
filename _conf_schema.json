@@ -33,6 +33,44 @@
       }
     }
   },
+  "access": {
+    "description": "权限",
+    "type": "object",
+    "items": {
+      "group_mode": {
+        "description": "群聊权限",
+        "type": "string",
+        "options": ["all", "whitelist", "blacklist", "private_only"],
+        "hint": "all=全部群，whitelist=只允许名单群，blacklist=屏蔽名单群，private_only=仅私聊。",
+        "default": "all"
+      },
+      "group_ids": {
+        "description": "群号名单",
+        "type": "string",
+        "hint": "群号用逗号、空格或换行分隔。",
+        "default": ""
+      },
+      "private_mode": {
+        "description": "私聊权限",
+        "type": "string",
+        "options": ["all", "friends", "whitelist", "blacklist", "none"],
+        "hint": "all=所有私聊，friends=仅好友，whitelist=只允许白名单，blacklist=屏蔽黑名单，none=拒绝私聊。",
+        "default": "all"
+      },
+      "private_whitelist": {
+        "description": "私聊白名单",
+        "type": "string",
+        "hint": "QQ号用逗号、空格或换行分隔。命中白名单优先允许。",
+        "default": ""
+      },
+      "private_blacklist": {
+        "description": "私聊黑名单",
+        "type": "string",
+        "hint": "QQ号用逗号、空格或换行分隔。命中黑名单优先拒绝。",
+        "default": ""
+      }
+    }
+  },
   "youtube": {
     "description": "YouTube",
     "type": "object",

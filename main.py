@@ -8,6 +8,7 @@ from astrbot.api import logger
 from astrbot.api.event import AstrMessageEvent, filter
 from astrbot.api.star import Context, Star, register
 
+from .access_control import access_allowed
 from .extractors import SupportedLink, extract_supported_links
 from .message_parts import compose_preview_parts
 from .providers.base import PreviewFetchError
@@ -53,6 +54,15 @@ class LinkPreviewPlugin(Star):
 
     @filter.event_message_type(filter.EventMessageType.ALL)
     async def on_message(self, event: AstrMessageEvent):
+        if not access_allowed(
+            event,
+            group_mode=str(self._cfg("group_mode", "all")),
+            group_ids=self._cfg("group_ids", ""),
+            private_mode=str(self._cfg("private_mode", "all")),
+            private_whitelist=self._cfg("private_whitelist", ""),
+            private_blacklist=self._cfg("private_blacklist", ""),
+        ):
+            return
         links = [item for item in extract_supported_links(event.message_str or "") if self._enabled(item)]
         if not links:
             return
