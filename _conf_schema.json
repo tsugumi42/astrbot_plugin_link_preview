@@ -1,0 +1,47 @@
+{
+  "enable_youtube": {
+    "description": "启用 YouTube 自动预览",
+    "type": "bool",
+    "default": true
+  },
+  "enable_twitter": {
+    "description": "启用 Twitter/X 自动预览",
+    "type": "bool",
+    "default": true
+  },
+  "max_links_per_message": {
+    "description": "单条消息最多解析链接数",
+    "type": "int",
+    "default": 1
+  },
+  "cooldown_seconds": {
+    "description": "同一会话预览冷却秒数",
+    "type": "int",
+    "default": 10
+  },
+  "request_timeout_seconds": {
+    "description": "网页请求超时秒数",
+    "type": "int",
+    "default": 10
+  },
+  "send_thumbnail_image": {
+    "description": "尝试发送 YouTube 缩略图",
+    "type": "bool",
+    "default": false
+  },
+  "send_twitter_images": {
+    "description": "尝试发送 Twitter/X 图片",
+    "type": "bool",
+    "default": true
+  },
+  "youtube_api_key": {
+    "description": "预留 YouTube API Key，留空则不使用",
+    "type": "string",
+    "default": ""
+  },
+  "twitter_bearer_token": {
+    "description": "预留 Twitter/X Bearer Token，留空则不使用",
+    "type": "string",
+    "default": ""
+  }
+}

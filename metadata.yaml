@@ -1,0 +1,9 @@
+name: astrbot_plugin_link_preview
+display_name: 链接预览
+desc: 自动解析 YouTube 和 Twitter/X 链接并生成清晰文字预览，优先适配 QQ 小号 + NapCat/OneBot v11。
+version: 0.1.0
+author: tsugumi42
+repo: "https://github.com/tsugumi42/astrbot_plugin_link_preview"
+support_platforms:
+  - aiocqhttp
+astrbot_version: ">=4.16,<5"
