@@ -27,7 +27,7 @@
   "send_thumbnail_image": {
     "description": "尝试发送 YouTube 缩略图",
     "type": "bool",
-    "default": false
+    "default": true
   },
   "send_twitter_images": {
     "description": "尝试发送 Twitter/X 图片",
