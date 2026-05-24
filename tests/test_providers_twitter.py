@@ -1,5 +1,6 @@
 from astrbot_plugin_link_preview.providers.twitter import parse_twitter_html
 from astrbot_plugin_link_preview.providers.twitter import parse_vxtwitter_payload
+from astrbot_plugin_link_preview.providers.twitter import vxtwitter_api_url
 
 
 def test_parse_twitter_opengraph_html():
@@ -33,3 +34,10 @@ def test_parse_vxtwitter_payload_with_media_and_metrics():
     assert preview.description == "画集「遺失物統轄機構」本日発売です。"
     assert preview.metrics["喜欢"] == "17516"
     assert preview.media[0].url.endswith(".jpg")
+
+
+def test_vxtwitter_api_url_for_x_status():
+    assert (
+        vxtwitter_api_url("https://x.com/HOSHIBACKYARD/status/1886429636135174546?s=20")
+        == "https://api.vxtwitter.com/HOSHIBACKYARD/status/1886429636135174546"
+    )

@@ -12,7 +12,9 @@ AstrBot 链接预览插件：自动解析 YouTube 和 Twitter/X 链接并生成�
 
 - 自动监听普通消息中的 YouTube 与 Twitter/X 链接。
 - 以清晰文本返回标题、作者、正文/简介和原链接。
-- YouTube 优先使用公开 oEmbed 信息，减少直接抓取页面导致的超时。
+- 收到链接后可先给处理状态；群聊优先添加表情回应，私聊或回应失败时发送文字提示。
+- YouTube 优先使用公开 oEmbed 信息，并可尽量补充观看数、上传时间和点赞数。
+- Twitter/X 状态链接优先使用 vxtwitter API，减少直接访问 x.com 导致的等待。
 - Twitter/X 图片会在配置开启时尽量随消息发送。
 - 可配置图片在文字前或文字后发送。
 - 官方 API 字段已预留，默认不使用。
@@ -34,6 +36,9 @@ QQ 小号 -> NapCat -> OneBot v11 反向 WebSocket -> AstrBot aiocqhttp 适配�
 - `enable_twitter`: 是否启用 Twitter/X 预览。
 - `max_links_per_message`: 单条消息最多解析几个链接。
 - `cooldown_seconds`: 同一会话自动预览冷却时间。
+- `send_processing_status`: 是否在开始读取前发送处理状态。
+- `youtube_fetch_page_details`: 是否额外尝试读取 YouTube 详情页补充观看数、上传时间、点赞数。
+- `youtube_detail_timeout_seconds`: YouTube 详情页补充读取超时秒数。
 - `send_thumbnail_image`: 是否尝试发送 YouTube 缩略图。
 - `send_twitter_images`: 是否尝试发送 Twitter/X 图片。
 - `image_position`: 图片位置，`after_text` 为文字后，`before_text` 为文字前。

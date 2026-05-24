@@ -13,6 +13,7 @@ from .message_parts import compose_preview_parts
 from .providers.base import PreviewFetchError
 from .providers.twitter import fetch_twitter_preview
 from .providers.youtube import fetch_youtube_preview
+from .status import send_processing_status
 
 
 @register("astrbot_plugin_link_preview", "local", "自动预览 YouTube 和 Twitter/X 链接", "0.1.0")
@@ -55,10 +56,17 @@ class LinkPreviewPlugin(Star):
 
         max_links = max(1, int(self._cfg("max_links_per_message", 1)))
         timeout = max(3, int(self._cfg("request_timeout_seconds", 10)))
+        if bool(self._cfg("send_processing_status", True)):
+            await send_processing_status(event, "已收到链接，正在读取预览信息。")
         for link in links[:max_links]:
             try:
                 if link.platform == "youtube":
-                    preview = await fetch_youtube_preview(link.url, timeout)
+                    preview = await fetch_youtube_preview(
+                        link.url,
+                        timeout,
+                        fetch_page_details=bool(self._cfg("youtube_fetch_page_details", True)),
+                        detail_timeout_seconds=max(1, int(self._cfg("youtube_detail_timeout_seconds", 4))),
+                    )
                 elif link.platform == "twitter":
                     preview = await fetch_twitter_preview(link.url, timeout)
                 else:

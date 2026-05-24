@@ -24,6 +24,21 @@
     "type": "int",
     "default": 10
   },
+  "send_processing_status": {
+    "description": "收到链接后先发送处理状态。群聊优先表情回应，失败或私聊时发送文字。",
+    "type": "bool",
+    "default": true
+  },
+  "youtube_fetch_page_details": {
+    "description": "YouTube 预览在 oEmbed 之外，额外尝试读取页面中的观看数、上传时间和点赞数。",
+    "type": "bool",
+    "default": true
+  },
+  "youtube_detail_timeout_seconds": {
+    "description": "YouTube 详情页补充读取超时秒数。失败时仍返回基础预览。",
+    "type": "int",
+    "default": 4
+  },
   "send_thumbnail_image": {
     "description": "尝试发送 YouTube 缩略图",
     "type": "bool",

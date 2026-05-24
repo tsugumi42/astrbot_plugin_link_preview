@@ -52,7 +52,7 @@ def parse_vxtwitter_payload(url: str, payload: dict) -> Preview:
     )
 
 
-def _vxtwitter_api_url(url: str) -> str | None:
+def vxtwitter_api_url(url: str) -> str | None:
     match = STATUS_RE.search(url)
     if not match:
         return None
@@ -61,7 +61,7 @@ def _vxtwitter_api_url(url: str) -> str | None:
 
 
 async def fetch_vxtwitter_preview(url: str, timeout_seconds: int) -> Preview:
-    api_url = _vxtwitter_api_url(url)
+    api_url = vxtwitter_api_url(url)
     if not api_url:
         raise PreviewFetchError("Twitter/X 链接格式无法识别。")
     request = Request(api_url, headers={"User-Agent": "Mozilla/5.0 AstrBotLinkPreview/0.1"})
@@ -74,6 +74,11 @@ async def fetch_vxtwitter_preview(url: str, timeout_seconds: int) -> Preview:
 
 
 async def fetch_twitter_preview(url: str, timeout_seconds: int) -> Preview:
+    if vxtwitter_api_url(url):
+        try:
+            return await fetch_vxtwitter_preview(url, timeout_seconds)
+        except PreviewFetchError:
+            pass
     request = Request(url, headers={"User-Agent": "Mozilla/5.0 AstrBotLinkPreview/0.1"})
     try:
         with urlopen(request, timeout=timeout_seconds) as response:
