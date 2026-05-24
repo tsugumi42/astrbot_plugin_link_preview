@@ -68,6 +68,8 @@ def _format_twitter(preview: Preview, fields: tuple[str, ...]) -> str:
     if "author" in fields and preview.author:
         author = f"{preview.author} {preview.author_url}".strip()
         lines.append(f"作者：{author}")
+    if any(item.kind in {"video", "gif"} for item in preview.media):
+        lines.append("媒体：包含视频/GIF，暂不发送媒体文件。")
     if "description" in fields and preview.description:
         lines.append(f"正文：\n{preview.description}")
     return "\n".join(lines)

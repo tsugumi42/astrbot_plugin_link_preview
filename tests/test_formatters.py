@@ -61,3 +61,13 @@ def test_format_twitter_preview_respects_fields():
     )
     text = format_preview_text(preview, fields=["url", "author"])
     assert text == "推文链接：https://x.com/u/status/1\n作者：Name (@u)"
+
+
+def test_format_twitter_preview_mentions_video_without_image_upload():
+    preview = Preview(
+        platform="twitter",
+        url="https://x.com/u/status/1",
+        media=[MediaItem(kind="video", url="https://video.twimg.com/a.mp4")],
+    )
+    text = format_preview_text(preview)
+    assert "媒体：包含视频/GIF，暂不发送媒体文件。" in text

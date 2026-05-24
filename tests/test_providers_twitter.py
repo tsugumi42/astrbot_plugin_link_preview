@@ -36,6 +36,35 @@ def test_parse_vxtwitter_payload_with_media_and_metrics():
     assert preview.media[0].url.endswith(".jpg")
 
 
+def test_parse_vxtwitter_payload_does_not_send_video_as_image():
+    payload = {
+        "user_name": "Name",
+        "user_screen_name": "name",
+        "text": "video tweet",
+        "mediaURLs": ["https://video.twimg.com/ext_tw_video/1/pu/vid/avc1/720x720/a.mp4"],
+    }
+    preview = parse_vxtwitter_payload("https://x.com/name/status/1", payload)
+    assert preview.media[0].kind == "video"
+
+
+def test_parse_vxtwitter_payload_reads_extended_media_type():
+    payload = {
+        "user_name": "Name",
+        "user_screen_name": "name",
+        "text": "gif tweet",
+        "media_extended": [
+            {
+                "type": "gif",
+                "url": "https://video.twimg.com/tweet_video/a.mp4",
+                "thumbnail_url": "https://pbs.twimg.com/tweet_video_thumb/a.jpg",
+            }
+        ],
+    }
+    preview = parse_vxtwitter_payload("https://x.com/name/status/1", payload)
+    assert preview.media[0].kind == "gif"
+    assert preview.media[0].url.endswith(".mp4")
+
+
 def test_vxtwitter_api_url_for_x_status():
     assert (
         vxtwitter_api_url("https://x.com/HOSHIBACKYARD/status/1886429636135174546?s=20")

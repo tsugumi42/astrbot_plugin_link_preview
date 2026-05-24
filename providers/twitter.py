@@ -9,6 +9,29 @@ from .base import PreviewFetchError
 from .meta import parse_meta
 
 STATUS_RE = re.compile(r"https?://(?:www\.)?(?:x|twitter)\.com/([^/\s]+)/status/(\d+)")
+IMAGE_RE = re.compile(r"\.(?:jpg|jpeg|png|webp)(?:\?|$)", re.IGNORECASE)
+VIDEO_RE = re.compile(r"\.(?:mp4|m3u8|mov)(?:\?|$)", re.IGNORECASE)
+
+
+def _media_kind_from_url(url: str) -> str:
+    if IMAGE_RE.search(url) or "pbs.twimg.com/media/" in url:
+        return "image"
+    if VIDEO_RE.search(url) or "video.twimg.com/" in url:
+        return "video"
+    if ".gif" in url.lower():
+        return "gif"
+    return "link"
+
+
+def _media_kind_from_type(value: object, fallback_url: str) -> str:
+    media_type = str(value or "").lower()
+    if media_type in {"photo", "image"}:
+        return "image"
+    if media_type in {"gif", "animated_gif"}:
+        return "gif"
+    if media_type == "video":
+        return "video"
+    return _media_kind_from_url(fallback_url)
 
 
 def parse_twitter_html(url: str, html: str) -> Preview:
@@ -35,9 +58,21 @@ def parse_vxtwitter_payload(url: str, payload: dict) -> Preview:
         author = f"{display_name} (@{screen_name})"
     else:
         author = f"@{screen_name}" if screen_name else display_name
-    media = [MediaItem("image", item) for item in payload.get("mediaURLs", []) if isinstance(item, str)]
+    media = []
+    for item in payload.get("media_extended", []) or []:
+        if not isinstance(item, dict):
+            continue
+        media_url = str(item.get("url") or item.get("thumbnail_url") or "")
+        if media_url:
+            media.append(MediaItem(_media_kind_from_type(item.get("type"), media_url), media_url))
+    if not media:
+        media = [
+            MediaItem(_media_kind_from_url(item), item)
+            for item in payload.get("mediaURLs", [])
+            if isinstance(item, str)
+        ]
     metrics = {}
-    for source_key, label in (("replies", "回复"), ("retweets", "转发"), ("likes", "喜欢")):
+    for source_key, label in (("likes", "喜欢"), ("retweets", "转发"), ("replies", "回复")):
         value = payload.get(source_key)
         if value is not None:
             metrics[label] = str(value)
